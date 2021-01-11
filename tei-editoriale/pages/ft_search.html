@@ -1,0 +1,31 @@
+<div xmlns="http://www.w3.org/1999/xhtml" data-template="templates:surround" data-template-with="templates/page.html" data-template-at="content">
+    <div>
+        <h1 style="text-align:center">Recherche d'un mot en contexte</h1>
+        <br/>
+        <h4>Veuillez saisir un mot :</h4>
+        <form method="get" class="form-inline" id="pageform">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="searchexpr"/>
+                </div>
+                <button type="submit" class="btn btn-primary">Go!</button>
+            </div>
+        </form>
+    </div>
+    <h3>
+        <p data-template="app:nb_hits"/>
+    </h3>
+    <hr/>
+    <table>
+        <thead>
+            <tr>
+                <th>score</th>
+                <th>KWIC</th>
+                <th>Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-template="app:ft_search"/>
+        </tbody>
+    </table>
+</div>

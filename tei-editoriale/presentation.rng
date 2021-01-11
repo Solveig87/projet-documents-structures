@@ -1,0 +1,127 @@
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <start>
+        <ref name="Page"/>
+    </start>
+
+    <define name="Page">
+        <element name="page">
+            <ref name="Header"/>
+            <ref name="Body"/>
+            <ref name="Conclusion"/>
+            <ref name="Image"/>
+        </element>
+    </define>
+    
+    <define name="Header">
+        <element name="header">
+            <ref name="Titre"/>
+            <ref name="Auteur"/>
+        </element>
+    </define>
+    
+    <define name="Titre">
+        <element name="titre">
+            <data type="string"/>
+        </element>
+    </define>
+    
+    <define name="Auteur">
+        <element name="auteur">
+            <data type="string"/>
+        </element>
+    </define>
+    
+    <define name="Body">
+        <element name="body">
+            <oneOrMore>
+                <ref name="Div"/>
+            </oneOrMore>
+        </element>
+    </define>
+    
+    <define name="Div">
+        <element name="div">
+			<attribute name="n">
+				<choice>
+					<value>1</value>
+					<value>2</value>
+				</choice>
+			</attribute>
+			<ref name="Head"/>
+			<interleave>
+				<zeroOrMore>
+					<ref name="Div"/>
+				</zeroOrMore>
+				<zeroOrMore>
+					<ref name="Paragraphe"/>
+				</zeroOrMore>
+			</interleave>
+        </element>
+    </define>
+	
+    <define name="Head">
+        <element name="head">
+            <data type="string"/>
+        </element>
+    </define>
+	
+    <define name="Paragraphe">
+        <element name="p">
+			<interleave>
+				<text/>
+				<zeroOrMore>
+					<ref name="Gras"/>
+				</zeroOrMore>
+				<zeroOrMore>
+					<ref name="Liste"/>
+				</zeroOrMore>
+				<zeroOrMore>
+					<ref name="Lien"/>
+				</zeroOrMore>
+			</interleave>
+        </element>
+    </define>
+
+    <define name="Gras">
+        <element name="gras">
+            <data type="string"/>
+        </element>
+    </define>
+	
+    <define name="Liste">
+        <element name="liste">
+            <oneOrMore>
+				<ref name="Ligne"/>
+			</oneOrMore>
+        </element>
+    </define>
+	
+    <define name="Lien">
+        <element name="lien">
+			<attribute name="url">
+				<data type="string"/>
+			</attribute>
+            <data type="string"/>
+        </element>
+    </define>
+	
+    <define name="Ligne">
+        <element name="l">
+            <data type="string"/>
+        </element>
+    </define>
+
+    <define name="Conclusion">
+        <element name="conclusion">
+			<ref name="Head"/>
+			<ref name="Paragraphe"/>
+        </element>
+    </define>
+	
+    <define name="Image">
+        <element name="image">
+            <data type="string"/>
+        </element>
+    </define>
+
+</grammar>

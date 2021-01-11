@@ -1,0 +1,40 @@
+<div xmlns="http://www.w3.org/1999/xhtml" data-template="templates:surround" data-template-with="templates/page.html" data-template-at="content">
+    
+    <h1 style="text-align:center">Recherche de mots en contexte dans une sélection de textes</h1>
+    <br/>
+    
+    <form action="">
+        <p>Veuillez choisir votre critère de sélection avant d'effectuer votre recherche :</p>
+        <input type="radio" id="titre" name="meta_type" value="titre" checked="checked"/>
+        <label for="case">Par titre</label>
+    
+        <input type="radio" id="auteur" name="meta_type" value="auteur"/>
+        <label for="case">Par auteur</label>
+        
+        <input type="radio" id="annee" name="meta_type" value="annee"/>
+        <label for="case">Par année de parution</label>
+        
+        <div class="form-group">
+            <div class="input-group">
+                <input type="text" class="form-control" name="meta_info"/>
+                <p>Veuillez saisir un mot dont vous souhaitez connaître le contexte dans les textes sélectionnés :</p>
+                <input type="text" class="form-control" name="searchexpr"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Go!</button>
+        </div>
+    </form>
+    
+    <hr/>
+    <table>
+        <thead>
+            <tr>
+                <th>score</th>
+                <th>KWIC</th>
+                <th>Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-template="app:all_search"/>
+        </tbody>
+    </table>
+</div>

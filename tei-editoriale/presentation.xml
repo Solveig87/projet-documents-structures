@@ -1,0 +1,77 @@
+<?xml-stylesheet type="text/xml" href="index.xsl"?><?xml-model href="index.rng" type="application/xml" 
+            schematypens="http://relaxng.org/ns/structure/1.0"?><page>
+	<header>
+		<titre>Présentation du projet</titre>
+		<auteur>Solveig Poder</auteur>
+	</header>
+	
+	<body>
+		<div n="1">
+			<head>Les étapes du projet</head>
+			<p>Ce site Web a été créé avec Exist-db dans le cadre d'un travail effectué pour le cours de XML du premier semestre du Master 2 TAL de l'Inalco, spécialité Ingénierie Multilingue.</p>
+			<p>Le projet dans lequel ce travail s'inscrit peut être divisé en deux principale tâches.</p>
+			<div n="2">
+				<head>Conversion de documents Open Document</head>
+				<p>Trois documents au format Open Document (extension .odt) nous ont été fournis. Il s'agit d'extraits d'œuvres littéraires.</p>
+				<p>Après avoir décompressé ces documents et récupéré les fichiers XML comprenant, d'une part, les métadonnées (meta.xml) et, d'autre part, le contenu (content.xml), nous avions comme première tâche de convertir ces documents au format TEI.</p>
+			</div>
+			<div n="2">
+				<head>Création du site avec Exist-db</head>
+				<p>La seconde étape du projet consistait à présenter les documents sur un site web en utilisant le logiciel Exist-db. Après avoir converti avec une seconde feuille XSLT nos documents du format XML au format HTML afin d'obtenir un joli affichage de nos textes (la transformation est appelée via une requête en langage XQuery), nous avions comme principale tâche pour cette étape de créer une interface de recherche plein texte.</p>
+				<p>Cela est rendu possible sur Exist-db grâce à la bibliothèque Lucene qui permet d'indexer des textes, et à des requêtes rédigées en XQuery reliées à des formulaires mis en place sur la page HTML qui appelle ces requêtes en leur passant en paramètres les variables récupérées grâce aux formulaires.</p>
+				<p>Enfin, le présent texte a été rédigé dans un document XML en conformité avec un schéma RelaxNG également rédigé par mes soins, puis transformé grâce à une troisième feuille XSLT.</p>
+			</div>
+		</div>
+		
+		<div n="1">
+			<head>La structure du site web</head>
+			<p>Pour revenir à la <gras>page d'accueil</gras> :
+				<lien url="index.html">Accueil</lien>
+			</p>
+
+			<p>Pour voir la <gras>liste des textes</gras> et accéder à leur contenu :
+				<lien url="toc.html">Table des matières</lien>
+			</p>
+			
+			<p>Pour faire de la <gras>recherche plein texte</gras> :
+				<lien url="recherche.html">Recherche plein texte</lien>
+			</p>
+			<p>Vous aurez le choix entre trois types de recherche :
+				<liste>
+					<l>Chercher un texte en fonction de son titre, son auteur ou l'année de sa première parution</l>
+					<l>Chercher un mot en contexte dans l'ensemble des documents</l>
+					<l>Chercher un mot en contexte dans une sélection de textes filtrés en fonction d'une métadonnée</l>
+				</liste>
+			</p>
+		</div>
+		
+		<div n="1">
+			<head>Les difficultés rencontrées</head>
+			<div n="2">
+				<head>Étape 1 : conversion des documents Open Document</head>
+				<p>Lors de cette étape, j'ai rencontré deux principales difficultés.</p>
+				<p>Tout d'abord, il a fallu trouver un moyen de transformer deux documents (meta.xml et content.xml) en un seul avec une seule feuille XSLT. J'ai trouvé la solution assez rapidement : j'ai récupéré les métadonnées avec la fonction <gras>document</gras> à laquelle j'ai fourni le chemin du fichier. Ma feuille XSLT appliquait ensuite ses transformations au document content.xml.</p>
+				<p>La seconde difficulté a été beaucoup plus compliquée à résoudre. En effet, il n'existe aucune hiérarchie entre les éléments dans le fichier xml.content : toutes les balises sont au même niveau, qu'il s'agisse de titres de parties, titres de chapitres ou de texte. Imbriquer des boucles <gras>for-each</gras> ne fonctionnait donc pas : une boucle cherchant tous les éléments texte au sein d'un chapitre renvoyait tous les éléments texte du document et pas seulement ceux du chapitre.</p>
+				<p>C'est pourquoi je n'ai fait qu'une seule boucle, sur tous les éléments suivant l'élément titre de l'œuvre. J'ai alors utilisé une structure conditionnelle pour avoir un traitement différent selon le type d'élément (titre de niveau 1, de niveau 2, citation ou texte). Le problème était alors de disposer les balises <gras>div</gras> correctement. En effet, par exemple, pour un élément titre, il me faut fermer la balise <gras>div</gras> du chapitre ou de la partie précédent(e) (sauf s'il s'agit du premier élément de niveau 1) et en ouvrir une nouvelle. Mais XSLT refuse cela : je ne peux pas fermer une balise avant même de l'avoir ouverte. Il a donc fallu "ruser" en passant les balises <gras>div</gras> en texte pour que XSLT ne les reconnaisse pas comme des balises.</p>
+				<p>En conclusion, cette première étape était plus délicate qu'il n'y paraît mais a finalement été menée à bien après quelques séances d'arrachage de cheveux !</p>
+			</div>
+			<div n="2">
+				<head>Étape 2 : Création du site avec Exist-db</head>
+				<p>La première difficulté pour cette partie du travail a été de prendre en main le logiciel Exist-db, qui n'est pas très intuitif et comporte quelques bugs. À cela s'ajoutait mon incompétence totale en HTML (le Master ne comporte aucun cours sur ce sujet et je n'en ai jamais fait). Cependant, j'ai trouvé un tutoriel qui m'a été extrêmement utile et dont je me suis largement inspirée. Il s'agit du tutoriel en dix parties disponible <lien url="https://howto.acdh.oeaw.ac.at/blog/part-1-definition-and-requirements/">ici</lien>.</p>
+				<p>J'ai commencé par l'affichage des textes, pour lequel je n'ai pas rencontré de problème majeur. J'ai d'abord créé une table des matières. Pour ce faire, j'ai légèrement changé le code donné par le tutoriel pour afficher les titres d'œuvres plutôt que les noms de documents. Cette table des matières mène à une page affichant le texte souhaité grâce à une requête XQuery qui transforme les documents TEI en documents HTML via une feuille XSLT. Cette feuille était fournie par le tutoriel mais il m'a fallu la réadapter pour afficher les titres correctement ainsi que les éléments en gras et italique, et supprimer les fonctions inutiles.</p>
+				<p>J'ai ensuite travaillé sur la recherche plein texte. Le tutoriel expliquait très bien comment produire une recherche de mot en contexte. Cependant il utilisait des requêtes jquery pour l'affichage du nombre de résultats et pour la mise en surbrillance du mot dans le texte. Ne connaissant pas jquery, je n'ai pas réussi à faire fonctionner ces requêtes. J'ai donc utiliser XQuery pour l'affichage du nombre de résultats trouvés. Je n'ai cependant pas réussi, malheureusement, à implémenter la surbrillance du mot.</p>
+				<p>J'ai ensuite ajouté moi-même d'autres requêtes XQuery. Tout d'abord, j'ai créé des requêtes permettant de trouver des textes en fonction d'une de leurs métadonnées (titre, auteur, année de première parution). Pour le titre et l'auteur, il m'a semblé qu'utiliser une distance de Levenshtein serait une très bonne idée. J'ai facilement trouvé sur Github la fonction recherchée et, étant donnée sa longueur, je l'ai recopiée dans un fichier XQL à part nommé <gras>lev.xql</gras>. J'ai ensuite créé (difficilement mais l'acharnement a fini par payer !) une requête permettant de combiner recherche de mot en contexte et recherche de textes par les métadonnées.</p>
+			</div>
+		</div>
+	</body>
+		
+	<conclusion>
+		<head>Conclusion</head>
+		<p>En conclusion, de nombreuses améliorations pourraient probablement être faites. Pour la recherche plein texte, j'ai créé de très nombreuses requêtes et mon code mériterait probablement d'être otimisé. En effet, certaines requêtes se ressemblent et mon document <gras>app.xql</gras> est assez long. D'autre part, ne maîtrisant que très mal le HTML et pas du tout le CSS, le site est très basique et peu esthétique. Néanmoins, avoir pu produire ce résultat est déjà pour moi, qui n'ai jamais créé de site web auparavant, un bel accomplissement et me motive à apprendre le HTML et le CSS en autodidacte lorsque j'aurai un peu plus de temps.</p>
+	</conclusion>
+	
+	<image>$app-root/resources/img/merci.jpg</image>
+		
+	
+
+</page>
